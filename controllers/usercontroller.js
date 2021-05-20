@@ -1,14 +1,14 @@
-var router = require('express').Router();
-var bcrypt = require('bcrypt');
-var jwt = require('jsonwebtoken');
+const router = require('express').Router();
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const db = require('../db');
+const User = db.User;
 
-var User = require('../db').import('../models/user');
-
-router.post('/signup', (req, res) => {
-    User.create({
+router.post('/signup', async (req, res) => {
+   await User.create({
         full_name: req.body.user.full_name,
         username: req.body.user.username,
-        passwordhash: bcrypt.hashSync(req.body.user.password, 10),
+        passwordHash: await bcrypt.hash(req.body.user.password, 10),
         email: req.body.user.email,
     })
         .then(
@@ -26,8 +26,8 @@ router.post('/signup', (req, res) => {
         )
 })
 
-router.post('/signin', (req, res) => {
-    User.findOne({ where: { username: req.body.user.username } }).then(user => {
+router.post('/signin', async (req, res) => {
+    await User.findOne({ where: { username: req.body.user.username } }).then(user => {
         if (user) {
             bcrypt.compare(req.body.user.password, user.passwordHash, function (err, matches) {
                 if (matches) {
