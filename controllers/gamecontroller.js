@@ -40,7 +40,7 @@ router.put('/update/:id', async (req, res) => {
 router.delete('/remove/:id', async (req, res) => {
 	try {
 		const removeGame = await gamesService.remove( req.params.id, req.user.id );
-		res.status(200).json({ game: removeGame, message: "Successfully deleted." });
+		res.status(204).json({ game: removeGame, message: "Successfully deleted." });
 	} catch (err) {
 		res.status(500).json({ error: err.message });
 	}
