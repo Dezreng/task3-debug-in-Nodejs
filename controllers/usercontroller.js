@@ -4,7 +4,7 @@ const usersService = require("../services/user.service");
 router.post('/signup', async (req, res) => {
 	try {
 		const user = await usersService.signup(req.body);
-		res.status(201).json({ user: user.user, token: user.token});
+		res.status(201).json({ user: user });
 	} catch (err) {
 		res.status(500).send(err.message);
 	}
