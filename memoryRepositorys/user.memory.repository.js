@@ -15,10 +15,8 @@ const signup = async ( reqBody ) => {
 		throw new Error(user);
 	} 
 
-	const token = jwt.sign({ id: user.id }, 'lets_play_sum_games_man', { expiresIn: 60 * 60 * 24 });
-
-  return { user, token };
-}
+  return userRespons(user);
+};
 
 const signin = async ( reqBody ) => {
 	const user = await User.findOne({ where: { username: reqBody.user.username } });
@@ -31,11 +29,15 @@ const signin = async ( reqBody ) => {
 
   if (matches) {
     const token = jwt.sign({ id: user.id }, 'lets_play_sum_games_man', { expiresIn: 60 * 60 * 24 });
-		return { user, token };
+		return { user: userRespons(user), token };
   } else {
 		return { error: "Passwords do not match." };
   }
+};
 
-}
+const userRespons = (user) => {
+	const { id, full_name, username, email, updatedAt, createdAt } = user;
+	return { id, full_name, username, email, updatedAt, createdAt };
+};
 
-module.exports = { signup, signin }
+module.exports = { signup, signin };
