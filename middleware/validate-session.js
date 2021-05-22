@@ -17,11 +17,9 @@ module.exports = function (req, res, next) {
             	req.user = user;
             	console.log(`user: ${user}`);
             	next();
-          	}, function () {
-          			 res.status(401).send({ error: "not authorized" });
-          	});
+          	})
             } else {
-            		res.status(400).send({ error: "not authorized" });
+            		res.status(401).send({ error: "not authorized" });
               }
           });
         }
